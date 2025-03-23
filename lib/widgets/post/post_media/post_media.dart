@@ -23,33 +23,32 @@ class _PostMediaState extends State<PostMedia> {
   Widget build(BuildContext context) {
     final media = widget.media;
 
-    return AspectRatio(
-      aspectRatio: 1 / 1.34,
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 13),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: SizedBox(
-                height: 400, // Fixed height
-                child: PageView.builder(
-                  controller: _pageController,
-                  physics: const ClampingScrollPhysics(),
-                  itemCount: media.length,
-                  onPageChanged: onPageChanged,
-                  itemBuilder:
-                      (context, index) =>
-                          Image.asset(media[index]['url']!, fit: BoxFit.cover),
-                ),
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 13),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: SizedBox(
+              height: 400, // Fixed height
+              child: PageView.builder(
+                controller: _pageController,
+                physics: const ClampingScrollPhysics(),
+                itemCount: media.length,
+                onPageChanged: onPageChanged,
+                itemBuilder:
+                    (context, index) => Image.asset(
+                      media[index]['url']! ?? 'assets/images/placeholder.jpeg',
+                      fit: BoxFit.cover,
+                    ),
               ),
             ),
           ),
+        ),
 
-          // Post media indicator (dots)
-          PostIndicator(currentPage: currentPage, length: media.length),
-        ],
-      ),
+        // Post media indicator (dots)
+        PostIndicator(currentPage: currentPage, length: media.length),
+      ],
     );
   }
 }

@@ -1,5 +1,6 @@
 class PostModel {
   final int id;
+  final String title;
   final String description;
   final double price;
   final List<Map<String, dynamic>> media;
@@ -11,6 +12,7 @@ class PostModel {
 
   PostModel({
     required this.id,
+    required this.title,
     required this.description,
     required this.price,
     required this.media,
@@ -25,6 +27,7 @@ class PostModel {
   static PostModel cachePost(int id) {
     return PostModel(
       id: id,
+      title: '',
       description: '',
       price: 0,
       media: [],

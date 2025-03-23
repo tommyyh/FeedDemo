@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:feed_demo/models/image_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -25,7 +26,10 @@ class _TestState extends State<Test> {
   Future<void> fetchData() async {
     final res = await http.get(
       Uri.parse('https://api.pexels.com/v1/search?query=nature&per_page=5'),
-      headers: {'Authorization': 'api_key', 'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': dotenv.env['PEXELS_API_KEY']!,
+        'Content-Type': 'application/json',
+      },
     );
     // print(res.statusCode);
     if (res.statusCode == 200) {

@@ -28,9 +28,10 @@ class PostsNotifier extends _$PostsNotifier {
       _limit,
       (index) => PostModel(
         id: _page * _limit + index,
+        title: 'Prodám lampičku č.${_page * _limit + index}',
         description:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
-        price: (_page * _limit + index).toDouble(),
+        price: (_page * _limit + index).toDouble() * 10,
         media: [
           {'photo': true, "url": "assets/images/placeholder.jpeg"},
           {'photo': true, "url": "assets/images/placeholder.jpeg"},

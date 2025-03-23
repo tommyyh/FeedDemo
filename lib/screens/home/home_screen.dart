@@ -43,7 +43,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return ListView.builder(
       controller: _controller,
       itemCount: posts.length,
-      itemBuilder: (context, index) => Post(post: posts[index]),
+      itemBuilder: (context, index) => Post(post: posts[index], index: index),
     );
   }
 }
