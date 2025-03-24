@@ -1,4 +1,3 @@
-import 'package:feed_demo/models/post_model.dart';
 import 'package:feed_demo/widgets/post/post_media/post_indicator.dart';
 import 'package:flutter/material.dart';
 

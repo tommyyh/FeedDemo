@@ -1,5 +1,6 @@
 import 'package:feed_demo/providers/post/post_provider.dart';
 import 'package:feed_demo/widgets/post/post.dart';
+import 'package:feed_demo/widgets/my_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,7 +11,8 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
   final ScrollController _controller = ScrollController();
 
   @override
@@ -35,8 +37,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
+  // Dispose for performance
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final posts = ref.watch(postsNotifierProvider);
 
     // List view for posts
@@ -46,4 +56,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       itemBuilder: (context, index) => Post(post: posts[index], index: index),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

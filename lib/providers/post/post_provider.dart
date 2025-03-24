@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:feed_demo/models/post_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:http/http.dart' as http;
 
 part 'post_provider.g.dart';
 
@@ -24,6 +29,7 @@ class PostsNotifier extends _$PostsNotifier {
     // Fetch post (Simulate)
     await Future.delayed(Duration(seconds: 1));
 
+    // In production: Implement image caching!
     List<PostModel> newPosts = List.generate(
       _limit,
       (index) => PostModel(
@@ -35,15 +41,12 @@ class PostsNotifier extends _$PostsNotifier {
         media: [
           {'photo': true, "url": "assets/images/placeholder.jpeg"},
           {'photo': true, "url": "assets/images/placeholder.jpeg"},
-          {'photo': true, "url": "assets/images/placeholder.jpeg"},
-          {'photo': true, "url": "assets/images/placeholder.jpeg"},
         ],
         status: 'prodává',
         product: 'lampička',
         category: 'Modní doplňky',
         likes: 10,
         userId: 0,
-        // content: "Post content #${_page * _limit + index}",
       ),
     );
 

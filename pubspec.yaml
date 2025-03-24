@@ -38,6 +38,8 @@ dependencies:
   flutter_riverpod: ^2.6.1
   riverpod_annotation: ^2.6.1
   flutter_dotenv: ^5.2.1
+  video_player: ^2.9.3
+  visibility_detector: ^0.4.0+2
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +69,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/videos/
     - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
