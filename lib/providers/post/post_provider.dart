@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:feed_demo/models/post_model.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:http/http.dart' as http;
 
 part 'post_provider.g.dart';
 
@@ -18,6 +15,7 @@ class PostsNotifier extends _$PostsNotifier {
   int _page = 0;
   final int _limit = 10;
   bool _isLoading = false;
+  Random random = Random();
 
   final Map<int, PostModel> _cache = {};
 
@@ -26,29 +24,38 @@ class PostsNotifier extends _$PostsNotifier {
     if (_isLoading) return;
     _isLoading = true;
 
-    // Fetch post (Simulate)
+    // Fetch post (Simulation)
     await Future.delayed(Duration(seconds: 1));
 
-    // In production: Implement image caching!
-    List<PostModel> newPosts = List.generate(
-      _limit,
-      (index) => PostModel(
+    // In production: Implement image caching
+    List<PostModel> newPosts = List.generate(_limit, (index) {
+      bool hasVideo = random.nextBool(); // Put videos in on random
+
+      List<Map<String, dynamic>> media = [
+        if (hasVideo)
+          {
+            'photo': false,
+            "url": "assets/video/cool_video.mp4",
+            "thumbnail": "assets/images/thumbnail.png",
+          },
+        {'photo': true, "url": "assets/images/placeholder.jpeg"},
+        if (!hasVideo) {'photo': true, "url": "assets/images/placeholder.jpeg"},
+      ];
+
+      return PostModel(
         id: _page * _limit + index,
         title: 'Prodám lampičku č.${_page * _limit + index}',
         description:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
         price: (_page * _limit + index).toDouble() * 10,
-        media: [
-          {'photo': true, "url": "assets/images/placeholder.jpeg"},
-          {'photo': true, "url": "assets/images/placeholder.jpeg"},
-        ],
+        media: media,
         status: 'prodává',
         product: 'lampička',
         category: 'Modní doplňky',
         likes: 10,
         userId: 0,
-      ),
-    );
+      );
+    });
 
     // Update state, pagination and loading
     state = [...state, ...newPosts];
@@ -102,5 +109,18 @@ class PostsNotifier extends _$PostsNotifier {
 
     cacheOldPosts(scrollPosition, safeLower, safeUpper);
     restoreCachedPosts(scrollPosition, safeLower, safeUpper);
+  }
+}
+
+// Active post state provider -> Keep track of active post to display video player
+@riverpod
+class ActivePost extends _$ActivePost {
+  @override
+  int build() {
+    return 0;
+  }
+
+  void setActivePost(int index) {
+    state = index;
   }
 }

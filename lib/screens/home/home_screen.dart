@@ -1,6 +1,6 @@
 import 'package:feed_demo/providers/post/post_provider.dart';
 import 'package:feed_demo/widgets/post/post.dart';
-import 'package:feed_demo/widgets/my_video_player.dart';
+import 'package:feed_demo/widgets/feed_video/feed_video.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,44 +19,63 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   void initState() {
     super.initState();
 
-    Future.microtask(
-      () => ref.read(postsNotifierProvider.notifier).fetchPosts(),
-    );
+    // Fetch posts on initialization
+    Future.microtask(() {
+      ref.read(postsNotifierProvider.notifier).fetchPosts();
+    });
 
     _controller.addListener(() {
-      // Trigger fetch when close to the bottom of the list
+      // Prefetch new page of posts before reaching the end
+      final int postHeight = 550;
+
       if (_controller.position.pixels >=
-          _controller.position.maxScrollExtent - (550 * 5)) {
+          _controller.position.maxScrollExtent - (postHeight * 5)) {
         ref.read(postsNotifierProvider.notifier).fetchPosts();
       }
 
       final scrollPosition = _controller.position.pixels;
 
-      // **Remove and cache posts when scrolled too far**
+      // Remove and cache posts when scrolled too far
       ref.read(postsNotifierProvider.notifier).manageCache(scrollPosition);
     });
-  }
-
-  // Dispose for performance
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     final posts = ref.watch(postsNotifierProvider);
+    final LayerLink layerLink = LayerLink();
 
     // List view for posts
-    return ListView.builder(
-      controller: _controller,
-      itemCount: posts.length,
-      itemBuilder: (context, index) => Post(post: posts[index], index: index),
+    // !ADD VIDEO CACHING FOR BETTER PERFORMANCE!
+    return Stack(
+      children: [
+        ListView.builder(
+          controller: _controller,
+          itemCount: posts.length,
+          itemBuilder:
+              (context, index) => Post(
+                post: posts[index],
+                index: index,
+                layerLink:
+                    ref.watch(activePostProvider) == index ? layerLink : null,
+              ),
+        ),
+
+        // Video player
+        FeedVideo(layerLink: layerLink),
+      ],
     );
   }
 
   @override
   bool get wantKeepAlive => true;
+
+  // Dispose for performance
+  @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
 }

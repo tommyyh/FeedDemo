@@ -9,18 +9,21 @@ class Post extends StatelessWidget {
   final PostModel post;
   final int index;
   final bool noRedirect;
+  final LayerLink? layerLink;
 
   const Post({
     super.key,
     required this.post,
     required this.index,
     this.noRedirect = false,
+    this.layerLink,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // Redirect on tap
         if (noRedirect) return;
 
         Navigator.of(context).push(
@@ -31,6 +34,7 @@ class Post extends StatelessWidget {
           ),
         );
       },
+      // Post
       child: Container(
         width: double.infinity,
         color: Colors.transparent,
@@ -49,7 +53,11 @@ class Post extends StatelessWidget {
             PostHeader(post: post),
 
             // Post media files
-            PostMedia(media: post.media),
+            PostMedia(
+              media: post.media,
+              postIndex: index,
+              layerLink: layerLink,
+            ),
             SizedBox(height: 12),
 
             // Post content

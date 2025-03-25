@@ -1,6 +1,7 @@
 import 'package:feed_demo/screens/home/home_screen.dart';
+import 'package:feed_demo/screens/my_profile/my_profile_screen.dart';
 import 'package:feed_demo/screens/new_post/new_post_screen.dart';
-import 'package:feed_demo/screens/post_details/post_details_screen.dart';
+import 'package:feed_demo/screens/notifications/notifications_screen.dart';
 import 'package:feed_demo/widgets/bottom_nav/bottom_nav.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,12 @@ class _LayoutState extends State<Layout> {
       // Use Indexed Stack + AutomaticKeepAliveClientMixin -> Keep scroll position
       body: IndexedStack(
         index: screenIndex,
-        children: const [HomeScreen(), NewPostScreen()],
+        children: const [
+          HomeScreen(),
+          NewPostScreen(),
+          NotificationsScreen(),
+          MyProfileScreen(),
+        ],
       ),
     );
   }
